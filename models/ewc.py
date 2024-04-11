@@ -101,8 +101,8 @@ class EWC(BaseLearner):
             scheduler = optim.lr_scheduler.MultiStepLR(
                 optimizer=optimizer, milestones=init_milestones, gamma=init_lr_decay
             )
-            
-            if self.args['skip'] :
+
+            if self.args['skip']:
                 if len(self._multiple_gpus) > 1:
                     self._network = self._network.module
                 load_acc = self._network.load_checkpoint(self.args)
@@ -180,7 +180,7 @@ class EWC(BaseLearner):
                 logits = self._network(inputs)["logits"]
 
                 loss_clf = F.cross_entropy(
-                    logits[:, self._known_classes :], targets - self._known_classes
+                    logits[:, self._known_classes:], targets - self._known_classes
                 )
                 loss_ewc = self.compute_ewc()
                 loss = loss_clf + lamda * loss_ewc

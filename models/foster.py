@@ -149,7 +149,7 @@ class FOSTER(BaseLearner):
                 for i, p in enumerate(self._network_module_ptr.fc.parameters()):
                     if i == 0:
                         p.data[
-                            self._known_classes :, : self._network_module_ptr.out_dim
+                            self._known_classes:, : self._network_module_ptr.out_dim
                         ] = torch.tensor(0.0)
             elif self.oofc != "ft":
                 assert 0, "not implemented"
@@ -249,7 +249,7 @@ class FOSTER(BaseLearner):
                     for i, p in enumerate(self._network_module_ptr.fc.parameters()):
                         if i == 0:
                             p.grad.data[
-                                self._known_classes :,
+                                self._known_classes:,
                                 : self._network_module_ptr.out_dim,
                             ] = torch.tensor(0.0)
                 elif self.oofc != "ft":

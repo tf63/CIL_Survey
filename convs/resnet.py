@@ -123,7 +123,6 @@ class Bottleneck(nn.Module):
         return out
 
 
-
 class ResNet(nn.Module):
 
     def __init__(self, block, layers, num_classes=1000, zero_init_residual=False,
@@ -242,14 +241,17 @@ def _resnet(arch, block, layers, pretrained, progress, **kwargs):
         model.load_state_dict(state_dict)
     return model
 
+
 def resnet10(pretrained=False, progress=True, **kwargs):
-        return _resnet('resnet10', BasicBlock, [1,1,1,1], pretrained, progress,
+    return _resnet('resnet10', BasicBlock, [1, 1, 1, 1], pretrained, progress,
                    **kwargs)
-        
+
+
 def resnet26(pretrained=False, progress=True, **kwargs):
     return _resnet('resnet26', Bottleneck, [2, 2, 2, 2], pretrained, progress,
                    **kwargs)
-    
+
+
 def resnet18(pretrained=False, progress=True, **kwargs):
     r"""ResNet-18 model from
     `"Deep Residual Learning for Image Recognition" <https://arxiv.org/pdf/1512.03385.pdf>`_
@@ -362,8 +364,9 @@ def wide_resnet101_2(pretrained=False, progress=True, **kwargs):
     return _resnet('wide_resnet101_2', Bottleneck, [3, 4, 23, 3],
                    pretrained, progress, **kwargs)
 
+
 if __name__ == '__main__':
-    data = torch.randn(2,3,224,224)
+    data = torch.randn(2, 3, 224, 224)
     net = resnet10()
     features = net(data)
     print(features['features'].shape)

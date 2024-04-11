@@ -198,9 +198,12 @@ def resnet110():
     return model
 
 # for auc
+
+
 def resnet14():
     model = CifarResNet(ResNetBasicblock, 14)
     return model
+
 
 def resnet26():
     model = CifarResNet(ResNetBasicblock, 26)

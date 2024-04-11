@@ -66,7 +66,7 @@ class iCaRL(BaseLearner):
             test_dataset, batch_size=batch_size, shuffle=False, num_workers=num_workers
         )
 
-        if self.args['skip'] and self._cur_task==0:
+        if self.args['skip'] and self._cur_task == 0:
             load_acc = self._network.load_checkpoint(self.args)
 
         if len(self._multiple_gpus) > 1:
@@ -78,7 +78,7 @@ class iCaRL(BaseLearner):
                 cur_test_acc = self._compute_accuracy(self._network, self.test_loader)
                 logging.info(f"Loaded_Test_Acc:{load_acc} Cur_Test_Acc:{cur_test_acc}")
             else:
-                self._train(self.train_loader, self.test_loader) 
+                self._train(self.train_loader, self.test_loader)
                 self._compute_accuracy(self._network, self.test_loader)
         else:
             self._train(self.train_loader, self.test_loader)

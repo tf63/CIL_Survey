@@ -201,7 +201,7 @@ class GEM(BaseLearner):
                     label_ = self.previous_label[mask].to(self._device)
                     pred_ = self._network(data_)["logits"]
                     pred_[:, : k * incremental_step].data.fill_(-10e10)
-                    pred_[:, (k + 1) * incremental_step :].data.fill_(-10e10)
+                    pred_[:, (k + 1) * incremental_step:].data.fill_(-10e10)
                     loss_ = F.cross_entropy(pred_, label_)
                     loss_.backward()
 

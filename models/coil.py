@@ -55,7 +55,7 @@ class COIL(BaseLearner):
             )
             next_period_class_means = torch.tensor(
                 self._ot_prototype_means[
-                    self._total_classes : self._total_classes + each_time_class_num
+                    self._total_classes: self._total_classes + each_time_class_num
                 ]
             )
             Q_cost_matrix = torch.cdist(
@@ -95,7 +95,7 @@ class COIL(BaseLearner):
             self._ot_prototype_means[: self._known_classes]
         )
         next_period_class_means = torch.tensor(
-            self._ot_prototype_means[self._known_classes : self._total_classes]
+            self._ot_prototype_means[self._known_classes: self._total_classes]
         )
         Q_cost_matrix = (
             torch.cdist(
@@ -190,7 +190,7 @@ class COIL(BaseLearner):
                     if epoch < 1:
                         features = F.normalize(output["features"], p=2, dim=1)
                         current_logit_new = F.log_softmax(
-                            logits[:, self._known_classes :] / T, dim=1
+                            logits[:, self._known_classes:] / T, dim=1
                         )
                         new_logit_by_wnew_init_by_ot = F.linear(
                             features, F.normalize(self._ot_new_branch, p=2, dim=1)

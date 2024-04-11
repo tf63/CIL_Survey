@@ -8,6 +8,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
+
 class DownsampleA(nn.Module):
     def __init__(self, nIn, nOut, stride):
         super(DownsampleA, self).__init__()
@@ -17,6 +18,7 @@ class DownsampleA(nn.Module):
     def forward(self, x):
         x = self.avg(x)
         return torch.cat((x, x.mul(0)), 1)
+
 
 class ResNetBasicblock(nn.Module):
     expansion = 1
@@ -48,7 +50,6 @@ class ResNetBasicblock(nn.Module):
         return F.relu(residual + basicblock, inplace=True)
 
 
-
 class GeneralizedResNet_cifar(nn.Module):
     def __init__(self, block, depth, channels=3):
         super(GeneralizedResNet_cifar, self).__init__()
@@ -57,7 +58,7 @@ class GeneralizedResNet_cifar(nn.Module):
         self.conv_1_3x3 = nn.Conv2d(channels, 16, kernel_size=3, stride=1, padding=1, bias=False)
         self.bn_1 = nn.BatchNorm2d(16)
 
-        self.inplanes = 16 
+        self.inplanes = 16
         self.stage_1 = self._make_layer(block, 16, layer_blocks, 1)
         self.stage_2 = self._make_layer(block, 32, layer_blocks, 2)
 
@@ -95,7 +96,8 @@ class GeneralizedResNet_cifar(nn.Module):
         x_1 = self.stage_1(x)  # [bs, 16, 32, 32]
         x_2 = self.stage_2(x_1)  # [bs, 32, 16, 16]
         return x_2
-    
+
+
 class SpecializedResNet_cifar(nn.Module):
     def __init__(self, block, depth, inplanes=32, feature_dim=64):
         super(SpecializedResNet_cifar, self).__init__()
@@ -104,7 +106,7 @@ class SpecializedResNet_cifar(nn.Module):
         layer_blocks = (depth - 2) // 6
         self.final_stage = self._make_layer(block, 64, layer_blocks, 2)
         self.avgpool = nn.AvgPool2d(8)
-    
+
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
                 n = m.kernel_size[0] * m.kernel_size[1] * m.out_channels
@@ -116,7 +118,7 @@ class SpecializedResNet_cifar(nn.Module):
             elif isinstance(m, nn.Linear):
                 nn.init.kaiming_normal_(m.weight)
                 m.bias.data.zero_()
-    
+
     def _make_layer(self, block, planes, blocks, stride=2):
         downsample = None
         if stride != 1 or self.inplanes != planes * block.expansion:
@@ -127,37 +129,41 @@ class SpecializedResNet_cifar(nn.Module):
         for i in range(1, blocks):
             layers.append(block(self.inplanes, planes))
         return nn.Sequential(*layers)
-    
+
     def forward(self, base_feature_map):
         final_feature_map = self.final_stage(base_feature_map)
         pooled = self.avgpool(final_feature_map)
-        features = pooled.view(pooled.size(0), -1) #bs x 64
+        features = pooled.view(pooled.size(0), -1)  # bs x 64
         return features
 
-#For cifar & MEMO
+# For cifar & MEMO
+
+
 def get_resnet8_a2fc():
-    basenet = GeneralizedResNet_cifar(ResNetBasicblock,8)
-    adaptivenet = SpecializedResNet_cifar(ResNetBasicblock,8)
-    return basenet,adaptivenet
+    basenet = GeneralizedResNet_cifar(ResNetBasicblock, 8)
+    adaptivenet = SpecializedResNet_cifar(ResNetBasicblock, 8)
+    return basenet, adaptivenet
+
 
 def get_resnet14_a2fc():
-    basenet = GeneralizedResNet_cifar(ResNetBasicblock,14)
-    adaptivenet = SpecializedResNet_cifar(ResNetBasicblock,14)
-    return basenet,adaptivenet
+    basenet = GeneralizedResNet_cifar(ResNetBasicblock, 14)
+    adaptivenet = SpecializedResNet_cifar(ResNetBasicblock, 14)
+    return basenet, adaptivenet
+
 
 def get_resnet20_a2fc():
-    basenet = GeneralizedResNet_cifar(ResNetBasicblock,20)
-    adaptivenet = SpecializedResNet_cifar(ResNetBasicblock,20)
-    return basenet,adaptivenet
+    basenet = GeneralizedResNet_cifar(ResNetBasicblock, 20)
+    adaptivenet = SpecializedResNet_cifar(ResNetBasicblock, 20)
+    return basenet, adaptivenet
+
 
 def get_resnet26_a2fc():
-    basenet = GeneralizedResNet_cifar(ResNetBasicblock,26)
-    adaptivenet = SpecializedResNet_cifar(ResNetBasicblock,26)
-    return basenet,adaptivenet
+    basenet = GeneralizedResNet_cifar(ResNetBasicblock, 26)
+    adaptivenet = SpecializedResNet_cifar(ResNetBasicblock, 26)
+    return basenet, adaptivenet
+
 
 def get_resnet32_a2fc():
-    basenet = GeneralizedResNet_cifar(ResNetBasicblock,32)
-    adaptivenet = SpecializedResNet_cifar(ResNetBasicblock,32)
-    return basenet,adaptivenet
-
-
+    basenet = GeneralizedResNet_cifar(ResNetBasicblock, 32)
+    adaptivenet = SpecializedResNet_cifar(ResNetBasicblock, 32)
+    return basenet, adaptivenet

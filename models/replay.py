@@ -88,7 +88,7 @@ class Replay(BaseLearner):
                 optimizer=optimizer, milestones=init_milestones, gamma=init_lr_decay
             )
 
-            if self.args['skip'] :
+            if self.args['skip']:
                 if len(self._multiple_gpus) > 1:
                     self._network = self._network.module
                 load_acc = self._network.load_checkpoint(self.args)

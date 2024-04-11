@@ -1,7 +1,8 @@
 import os
 import numpy as np
 import torch
-import  json
+import json
+
 
 class ConfigEncoder(json.JSONEncoder):
     def default(self, o):
@@ -16,6 +17,7 @@ class ConfigEncoder(json.JSONEncoder):
                 '$function': o.__module__ + "." + o.__name__
             }
         return json.JSONEncoder.default(self, o)
+
 
 def count_parameters(model, trainable=False):
     if trainable:
@@ -86,10 +88,11 @@ def split_images_labels(imgs):
 
     return np.array(images), np.array(labels)
 
+
 def save_fc(args, model):
     _path = os.path.join(args['logfilename'], "fc.pt")
-    if len(args['device']) > 1: 
-        fc_weight = model._network.fc.weight.data    
+    if len(args['device']) > 1:
+        fc_weight = model._network.fc.weight.data
     else:
         fc_weight = model._network.fc.weight.data.cpu()
     torch.save(fc_weight, _path)
@@ -100,11 +103,12 @@ def save_fc(args, model):
     with open(_save_path, "a+") as f:
         f.write(f"{args['time_str']},{args['model_name']},{_path} \n")
 
+
 def save_model(args, model):
-    #used in PODNet
+    # used in PODNet
     _path = os.path.join(args['logfilename'], "model.pt")
     if len(args['device']) > 1:
-        weight = model._network   
+        weight = model._network
     else:
         weight = model._network.cpu()
     torch.save(weight, _path)

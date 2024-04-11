@@ -40,7 +40,7 @@ class RMMBase(BaseLearner):
 
         if self._m_rate_list[self._cur_task] != 0:
             print(self._total_classes)
-            self._memory_size = min(int(self._total_classes*img_per_cls-1),self._args["memory_size"] + int(
+            self._memory_size = min(int(self._total_classes * img_per_cls - 1), self._args["memory_size"] + int(
                 self._m_rate_list[self._cur_task]
                 * self._args["increment"]
                 * img_per_cls
@@ -69,8 +69,8 @@ class RMMBase(BaseLearner):
         else:
             img_per_cls = 1300
         ns = [
-            min(img_per_cls,int(m * (1 - self._c_rate_list[self._cur_task]))),
-            min(img_per_cls,int(m * (1 + self._c_rate_list[self._cur_task]))),
+            min(img_per_cls, int(m * (1 - self._c_rate_list[self._cur_task]))),
+            min(img_per_cls, int(m * (1 + self._c_rate_list[self._cur_task]))),
         ]
         logging.info(
             "Constructing exemplars...({} or {} per classes)".format(ns[0], ns[1])
@@ -148,7 +148,7 @@ class RMMBase(BaseLearner):
                 )  # Remove it to avoid duplicative selection
                 if len(vectors) == 0:
                     break
-                
+
             selected_exemplars = np.array(selected_exemplars)
             # exemplar_targets = np.full(ms[class_idx - self._known_classes], class_idx)
             exemplar_targets = np.full(selected_exemplars.shape[0], class_idx)

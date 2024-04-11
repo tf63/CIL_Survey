@@ -27,6 +27,7 @@ RUN apt update && \
     libsndfile1-dev \
     libgl1 \
     python3.8 \
+    python3.8-venv \
     python3-pip
 
 # ----------------------------------------------------------------
@@ -55,18 +56,24 @@ USER $USER_NAME
 # setup (user) 
 # ----------------------------------------------------------------
 
-# poetryのインストール
+##################################################################
+# poetryインストール
 # RUN curl -sSL https://install.python-poetry.org | python3 -
 
 # Poetryのパスを通す
-# ENV PATH /home/user/.local/bin:$PATH
+ENV PATH /home/user/.local/bin:$PATH
 
 # vscodeが仮想環境を読み込むようにする
 # RUN poetry config virtualenvs.in-project true
+##################################################################
 
-# COPY docker/requirements.txt /app
+# requirements.txtをコピー
+COPY docker/requirements.txt /app
 
-# RUN pip3 install --no-cache-dir -U pip && \
-#     pip3 install --no-cache-dir -r requirements.txt
+RUN pip3 install --no-cache-dir -U pip setuptools wheel
 
-# RUN pip3 install --no-cache-dir torch==1.8.1+cu111 torchvision==0.9.1+cu111 -f https://download.pytorch.org/whl/torch_stable.html 
+# 先にtorchを入れておく
+RUN pip3 install --no-cache-dir torch==1.8.1+cu111 torchvision==0.9.1+cu111 -f https://download.pytorch.org/whl/torch_stable.html 
+
+# その他のライブラリのインストール
+RUN pip3 install --no-cache-dir -r requirements.txt

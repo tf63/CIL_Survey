@@ -84,7 +84,7 @@ class DER(BaseLearner):
 
     def train(self):
         self._network.train()
-        if len(self._multiple_gpus) > 1 :
+        if len(self._multiple_gpus) > 1:
             self._network_module_ptr = self._network.module
         else:
             self._network_module_ptr = self._network
@@ -111,7 +111,7 @@ class DER(BaseLearner):
                 test_acc = self._network.load_checkpoint(self.args)
                 cur_test_acc = self._compute_accuracy(self._network, test_loader)
                 logging.info(f"Loaded Test Acc:{test_acc} Cur_Test_Acc:{cur_test_acc}")
-                
+
         else:
             optimizer = optim.SGD(
                 filter(lambda p: p.requires_grad, self._network.parameters()),

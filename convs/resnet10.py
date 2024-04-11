@@ -18,10 +18,12 @@ import torch.nn as nn
 import torch.nn.functional as F
 # from layers.ModulatedAttLayer import ModulatedAttLayer
 
+
 def conv3x3(in_planes, out_planes, stride=1):
     """3x3 convolution with padding"""
     return nn.Conv2d(in_planes, out_planes, kernel_size=3, stride=stride,
                      padding=1, bias=False)
+
 
 class BasicBlock(nn.Module):
     expansion = 1
@@ -53,7 +55,8 @@ class BasicBlock(nn.Module):
         out = self.relu(out)
 
         return out
-    
+
+
 class Bottleneck(nn.Module):
     expansion = 4
 
@@ -92,6 +95,7 @@ class Bottleneck(nn.Module):
 
         return out
 
+
 class ResNet(nn.Module):
 
     def __init__(self, block, layers, use_modulatedatt=False, use_fc=False, dropout=None):
@@ -114,12 +118,12 @@ class ResNet(nn.Module):
 
         if self.use_fc:
             print('Using fc.')
-            self.fc_add = nn.Linear(512*block.expansion, 512)
+            self.fc_add = nn.Linear(512 * block.expansion, 512)
 
         if self.use_dropout:
             print('Using dropout.')
             self.dropout = nn.Dropout(p=dropout)
-  
+
         # self.use_modulatedatt = use_modulatedatt
         # if self.use_modulatedatt:
         #     print('Using self attention.')
@@ -162,22 +166,25 @@ class ResNet(nn.Module):
         x = self.layer4(x)
 
         x = self.avgpool(x)
-        
+
         x = x.view(x.size(0), -1)
 
         return {
-            "features":x
+            "features": x
         }
+
+
 def resnet10():
-    model = ResNet(BasicBlock,[1,1,1,1])
+    model = ResNet(BasicBlock, [1, 1, 1, 1])
     return model
 
+
 if __name__ == '__main__':
-    data = torch.randn(2,3,224,224)
+    data = torch.randn(2, 3, 224, 224)
     net = resnet10()
     features = net(data)
     print(features['features'].shape)
-    model2imagenet = 3*224*224
+    model2imagenet = 3 * 224 * 224
 
     a = resnet10()
     print(f"resnet10 all:{sum(p.numel() for p in a.parameters())}")

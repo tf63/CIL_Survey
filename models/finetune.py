@@ -21,7 +21,7 @@ epochs = 80
 lrate = 0.1
 milestones = [40, 70]
 lrate_decay = 0.1
-batch_size = 128 
+batch_size = 128
 weight_decay = 2e-4
 num_workers = 8
 
@@ -70,7 +70,7 @@ class Finetune(BaseLearner):
         self._network.to(self._device)
         if self._cur_task == 0:
             optimizer = optim.SGD(
-                self._network.parameters(),  
+                self._network.parameters(),
                 momentum=0.9,
                 lr=init_lr,
                 weight_decay=init_weight_decay,
@@ -79,9 +79,9 @@ class Finetune(BaseLearner):
             #     optimizer=optimizer, milestones=init_milestones, gamma=init_lr_decay
             # )
             scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
-                optimizer, 
+                optimizer,
                 T_max=init_epoch,
-            ) #check
+            )  # check
 
             if self.args['skip']:
                 if len(self._multiple_gpus) > 1:
@@ -96,7 +96,7 @@ class Finetune(BaseLearner):
                 self._init_train(train_loader, test_loader, optimizer, scheduler)
         else:
             optimizer = optim.SGD(
-                self._network.parameters(),  
+                self._network.parameters(),
                 lr=lrate,
                 momentum=0.9,
                 weight_decay=weight_decay,
@@ -168,7 +168,7 @@ class Finetune(BaseLearner):
 
                 fake_targets = targets - self._known_classes
                 loss_clf = F.cross_entropy(
-                    logits[:, self._known_classes :], fake_targets
+                    logits[:, self._known_classes:], fake_targets
                 )
 
                 loss = loss_clf

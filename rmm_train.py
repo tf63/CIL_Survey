@@ -1,5 +1,5 @@
 '''
-We implemented `iCaRL+RMM`, `FOSTER+RMM` in [rmm.py](models/rmm.py).  We implemented the `Pretraining Stage` of `RMM` in [rmm_train.py](rmm_train.py). 
+We implemented `iCaRL+RMM`, `FOSTER+RMM` in [rmm.py](models/rmm.py).  We implemented the `Pretraining Stage` of `RMM` in [rmm_train.py](rmm_train.py).
 Use the following training script to run it.
 ```bash
 python rmm_train.py --config=./exps/rmm-pretrain.json
@@ -82,12 +82,12 @@ class CILEnv:
         return (
             np.array(
                 [
-                    self.get_task_size(self.cur_task+1)/100 if not done else 0.,
+                    self.get_task_size(self.cur_task + 1) / 100 if not done else 0.,
                     self.model.memory_size
                     / (self.model.memory_size + self.model.new_memory_size),
                 ]
             ),
-            cnn_accy["top1"]/100,
+            cnn_accy["top1"] / 100,
             done,
             info,
         )
@@ -129,7 +129,7 @@ def _train(args):
     buffer_size = 1000
     minimal_size = 50
     batch_size = 32
-    sigma = 0.2 # action noise, encouraging the off-policy algo to explore.
+    sigma = 0.2  # action noise, encouraging the off-policy algo to explore.
     device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
     env = CILEnv(args)
     replay_buffer = ReplayBuffer(buffer_size)

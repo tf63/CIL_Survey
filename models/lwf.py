@@ -84,7 +84,7 @@ class LwF(BaseLearner):
             scheduler = optim.lr_scheduler.MultiStepLR(
                 optimizer=optimizer, milestones=init_milestones, gamma=init_lr_decay
             )
-            if self.args['skip'] :
+            if self.args['skip']:
                 if len(self._multiple_gpus) > 1:
                     self._network = self._network.module
                 load_acc = self._network.load_checkpoint(self.args)
@@ -165,7 +165,7 @@ class LwF(BaseLearner):
 
                 fake_targets = targets - self._known_classes
                 loss_clf = F.cross_entropy(
-                    logits[:, self._known_classes :], fake_targets
+                    logits[:, self._known_classes:], fake_targets
                 )
                 loss_kd = _KD_loss(
                     logits[:, : self._known_classes],

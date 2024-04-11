@@ -13,6 +13,7 @@ class SimpleLinear(nn.Module):
     Reference:
     https://github.com/pytorch/pytorch/blob/master/torch/nn/modules/linear.py
     '''
+
     def __init__(self, in_features, out_features, bias=True):
         super(SimpleLinear, self).__init__()
         self.in_features = in_features

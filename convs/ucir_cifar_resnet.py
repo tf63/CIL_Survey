@@ -131,7 +131,7 @@ class CifarResNet(nn.Module):
         layers.append(block(self.inplanes, planes, stride, downsample))
         self.inplanes = planes * block.expansion
         if last_phase:
-            for i in range(1, blocks-1):
+            for i in range(1, blocks - 1):
                 layers.append(block(self.inplanes, planes))
             layers.append(block(self.inplanes, planes, last=True))
         else:
