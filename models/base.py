@@ -26,7 +26,7 @@ class BaseLearner(object):
         self._memory_size = args["memory_size"]
         self._memory_per_class = args.get("memory_per_class", None)
         self._fixed_memory = args.get("fixed_memory", False)
-        self._device = args["device"][0]
+        self._device = "cuda:0"
         self._multiple_gpus = args["device"]
 
     @property
@@ -68,11 +68,11 @@ class BaseLearner(object):
         save_dict = {
             "tasks": self._cur_task,
             "convnet": _checkpoint_cpu.convnet.state_dict(),
-            "fc":_checkpoint_cpu.fc.state_dict(),
+            "fc": _checkpoint_cpu.fc.state_dict(),
             "test_acc": test_acc
         }
         torch.save(save_dict, "{}_{}.pkl".format(checkpoint_name, self._cur_task))
-    
+
     def after_task(self):
         pass
 
@@ -97,7 +97,7 @@ class BaseLearner(object):
             nme_accy = self._evaluate(y_pred, y_true)
         else:
             nme_accy = None
-        
+
         if save_conf:
             _pred = y_pred.T[0]
             _pred_path = os.path.join(self.args['logfilename'], "pred.npy")
@@ -110,7 +110,7 @@ class BaseLearner(object):
             _save_path = os.path.join(_save_dir, f"{self.args['csv_name']}.csv")
             with open(_save_path, "a+") as f:
                 f.write(f"{self.args['time_str']},{self.args['model_name']},{_pred_path},{_target_path} \n")
-        
+
         return cnn_accy, nme_accy
 
     def incremental_train(self):
@@ -258,7 +258,7 @@ class BaseLearner(object):
                 data = np.delete(
                     data, i, axis=0
                 )  # Remove it to avoid duplicative selection
-                
+
                 if len(vectors) == 0:
                     break
             # uniques = np.unique(selected_exemplars, axis=0)
