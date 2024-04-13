@@ -6,6 +6,7 @@ import os
 import sys
 import time
 
+import wandb
 import torch
 from utils import factory
 from utils.data_manager import DataManager
@@ -16,9 +17,15 @@ def train(args):
     seed_list = copy.deepcopy(args["seed"])
     device = copy.deepcopy(args["device"])
 
+    tags = [args["dataset"], args["model_name"], args["convnet_type"]]
+    if args["debug"] is True:
+        tags.append("debug")
+
     for seed in seed_list:
         args["seed"] = seed
         args["device"] = device
+        wandb.init(project="cil-survey", name=f"{args['dataset']}-{args['model_name']}-{args['convnet_type']}-seed{seed}",
+                   tags=tags, config=args)
         _train(args)
 
 
@@ -124,6 +131,9 @@ def _train(args):
             logging.info("CNN top5 curve: {}".format(cnn_curve["top5"]))
             logging.info("NME top1 curve: {}".format(nme_curve["top1"]))
             logging.info("NME top5 curve: {}\n".format(nme_curve["top5"]))
+
+            wandb.log({"cnn_top1": cnn_accy["top1"], "cnn_top5": cnn_accy["top5"],
+                       "nme_top1": nme_accy["top1"], "nme_top5": nme_accy["top5"]})
         else:
             logging.info("No NME accuracy.")
             logging.info("CNN: {}".format(cnn_accy["grouped"]))
@@ -133,6 +143,7 @@ def _train(args):
 
             logging.info("CNN top1 curve: {}".format(cnn_curve["top1"]))
             logging.info("CNN top5 curve: {}\n".format(cnn_curve["top5"]))
+            wandb.log({"cnn_top1": cnn_accy["top1"], "cnn_top5": cnn_accy["top5"]})
 
     end_time = time.time()
     logging.info(f"End Time:{end_time}")

@@ -18,7 +18,7 @@ build()
 run()
 {
     # https://docs.docker.jp/engine/reference/commandline/run.html
-    docker run --rm --name cil --gpus all --shm-size=32g -it -v $(pwd):/app -v $DATASET_DIRS:/dataset -v $DATA_DIRS:/data tf63/cu11.1.1-torch1.8.1
+    docker run --rm --name cil --gpus all --shm-size=32g -it --env-file ./.env -v $(pwd):/app -v $DATASET_DIRS:/dataset -v $DATA_DIRS:/data tf63/cu11.1.1-torch1.8.1
 }
 
 start()
