@@ -3,3 +3,4 @@ POT==0.9.3
 quadprog==0.1.12
 scipy==1.10.1
 tqdm==4.66.2
+wandb==0.16.6

@@ -52,6 +52,7 @@ RUN useradd -m -u $USER_UID -g $USER_GID -s /bin/bash $USER_NAME
 # 初期ユーザーの変更
 USER $USER_NAME
 
+ENV PATH /home/$USER_NAME/.local/bin:$PATH
 # ----------------------------------------------------------------
 # setup (user) 
 # ----------------------------------------------------------------
@@ -59,9 +60,6 @@ USER $USER_NAME
 ##################################################################
 # poetryインストール
 # RUN curl -sSL https://install.python-poetry.org | python3 -
-
-# Poetryのパスを通す
-ENV PATH /home/user/.local/bin:$PATH
 
 # vscodeが仮想環境を読み込むようにする
 # RUN poetry config virtualenvs.in-project true
